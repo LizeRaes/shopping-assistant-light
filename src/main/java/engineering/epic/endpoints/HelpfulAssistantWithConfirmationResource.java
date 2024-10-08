@@ -48,19 +48,11 @@ public class HelpfulAssistantWithConfirmationResource {
     @Inject
     CustomShoppingState customShoppingState;
 
-    @Inject
-    HackerResource hackerResource;
-
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response handleMessage(MessageRequest request) {
         try {
-            // unleash the hacker - start Quarkus with -Dhacked=true
-            if (HACKED || SHOUTING) {
-                hackerResource.unleash("Hi, welcome to Bizarre Bazaar, what would you need?", HACKED ? HackerResource.HackType.HACKED : HackerResource.HackType.SHOUTING);
-            }
-
             String responseString = processMessage(request.getMessage());
             MessageResponse response = new MessageResponse(responseString);
             return Response.ok(response).build();
@@ -148,16 +140,6 @@ public class HelpfulAssistantWithConfirmationResource {
         // was in last step and doesn't want to continue shopping
         MessageResponse response = new MessageResponse("Thank you for shopping at Bizarre Bazaar, and have a great day!");
         return "Thank you for shopping at Bizarre Bazaar, and have a great day!";
-    }
-
-    public void respondToHacker(String hackerMessage, HackerResource.HackType hackType) {
-        try{
-            String response = processMessage(hackerMessage);
-            myService.sendChatMessageToFrontend(response, "chatMessage", myWebSocket.getSessionById());
-            hackerResource.unleash(response, hackType);
-        } catch (Exception e) {
-            System.out.println("Error processing hacker message" + e.getMessage());
-        }
     }
 
     public static class MessageRequest {

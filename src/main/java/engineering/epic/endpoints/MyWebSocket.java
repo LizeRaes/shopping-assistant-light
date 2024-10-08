@@ -22,9 +22,6 @@ public class MyWebSocket {
     @Inject
     CustomShoppingState customShoppingState;
 
-    @Inject
-    HackerResource hackerResource;
-
     // A thread-safe map to store sessions, keyed by session ID
     private Map<String, Session> sessions = new ConcurrentHashMap<>();
     private Integer userId = 0;
